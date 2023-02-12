@@ -19,17 +19,19 @@ app.use(bodyParser.json());
 app.use("/content", express.static(path.join(__dirname, "public")));
 
 app.get("/", (_, res) => {
-  /*
-  res.sendFile("./public/index.html", { root: __dirname });
-  */
-  res.status(501).end();
+  
+ 
+  res.sendFile("./public/index.html", { root: __dirname }, (err) =>{
+    console.log(err);
+});
+  // res.end();
 });
 
 app.get('/todos', (_, res) => {
-  /*
-  res.header("Content-Type","application/json");
-  res.sendFile(todoFilePath, { root: __dirname });
-  */
+  
+  // res.header("Content-Type","application/json");
+  // res.sendFile(todoFilePath, { root: __dirname });
+
   res.status(501).end();
 });
 
