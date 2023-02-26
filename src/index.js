@@ -6,9 +6,8 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const { v4: uuidv4 } = require("uuid");
 const todoFilePath = process.env.BASE_JSON_PATH;
-const getData = () => JSON.parse(
-  fs.readFileSync(path.join(__dirname, todoFilePath))
-);
+const getData = () =>
+  JSON.parse(fs.readFileSync(path.join(__dirname, todoFilePath)));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -17,41 +16,40 @@ app.use(bodyParser.json());
 
 app.use("/content", express.static(path.join(__dirname, "public")));
 
-app.get("/", (_req, res) => { 
-  res.sendFile("./public/index.html", { root: __dirname }, (err) =>{
+app.get("/", (_req, res) => {
+  res.sendFile("./public/index.html", { root: __dirname }, (err) => {
     console.log(err);
-});
+  });
   // res.end();
 });
 
 //Add GET request with path '/todos to return todos from todos.json file
 
-app.get('/todos', (_, res) => {
-  // res.statusCode = 200
-  res.header("Content-Type","application/json");
+app.get("/todos", (_, res) => {
+  res.header("Content-Type", "application/json");
   res.sendFile(todoFilePath, { root: __dirname });
   res.status(200);
-  // res.status(501).end();
 });
 
-//Add GET request with path '/todos/overdue'. 
+//Add GET request with path '/todos/overdue'.
 // Return a list of overdue todos, else if no overdue todos an empty list (array). Todos can be filtered based on due date
 
 app.get("/todos/overdue", (req, res) => {
   res.header("Content-Type", "application/json");
- let todos = getData()
-  .filter((todo) => !todo.completed && Date.parse(todo.due) < new Date())
-   res.send(todos);
+  let todos = getData().filter(
+    (todo) => !todo.completed && Date.parse(todo.due) < new Date()
+  );
+  res.send(todos);
 });
 
 //Add GET request with path '/todos/completed'
 app.get("/todos/completed", (req, res) => {
   res.header("Content-Type", "application/json");
-let todos = getData().filter((todo) => todo.completed)
-res.send(todos);
+  let todos = getData().filter((todo) => todo.completed);
+  res.send(todos);
 });
 //Add POST request with path '/todos'
-app.post('/todos', function(req, res) {
+app.post("/todos", function (req, res) {
   var newTask = req.body.newtask;
   //add the new task from the post route
   task.push(newTask);
@@ -59,6 +57,14 @@ app.post('/todos', function(req, res) {
 });
 
 //Add PATCH request with path '/todos/:id
+
+app.patch("/todos/:id", (req, res) => {
+  findElementById(req.params.id, res).name = req.body.name;
+  if (req.body.due) {
+    item.due = req.body.due;
+  }
+  checkIfUpdateSuccessful(res);
+});
 
 //Add POST request with path '/todos/:id/complete
 
