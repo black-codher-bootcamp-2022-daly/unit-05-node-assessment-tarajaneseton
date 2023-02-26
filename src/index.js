@@ -57,9 +57,10 @@ app.post("/todos", function (req, res) {
 });
 
 //Add PATCH request with path '/todos/:id
-
+// Return a specific todo with the corresponding id
 app.patch("/todos/:id", (req, res) => {
   findElementById(req.params.id, res).name = req.body.name;
+  console.log(findElementById);
   if (req.body.due) {
     item.due = req.body.due;
   }
@@ -67,6 +68,14 @@ app.patch("/todos/:id", (req, res) => {
 });
 
 //Add POST request with path '/todos/:id/complete
+
+app.post("/todos/:id/complete", (req, res) => {
+
+  findElementById(req.params.id, res).completed = true;
+
+  checkIfUpdateSuccessful(res, 200, 404);
+
+});
 
 //Add POST request with path '/todos/:id/undo
 
